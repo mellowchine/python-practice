@@ -4,11 +4,14 @@ from tkinter import messagebox as mb
 import requests
 
 
-def update_b_label(event):
-    # Получаем полное название базовой валюты из словаря и обновляем метку
-    code = base_combobox.get()
-    name = currencies[code]
-    b_label.config(text=name)
+def update_base1_label(event):
+    code = base_combobox1.get()
+    base1_label.config(text=currencies[code])
+
+
+def update_base2_label(event):
+    code = base_combobox2.get()
+    base2_label.config(text=currencies[code])
 
 
 def update_t_label(event):
@@ -19,24 +22,37 @@ def update_t_label(event):
 
 
 def exchange():
+    base1_code = base_combobox1.get()
+    base2_code = base_combobox2.get()
     target_code = target_combobox.get()
-    base_code = base_combobox.get()
-    if target_code and base_code:
+
+    if base1_code and base2_code and target_code:
         try:
-            response = requests.get(f'https://open.er-api.com/v6/latest/{base_code}')
-            response.raise_for_status()
-            data = response.json()
-            if target_code in data['rates']:
-                exchange_rate = data['rates'][target_code]
-                base = currencies[base_code]
-                target = currencies[target_code]
-                mb.showinfo("Курс обмена", f"Курс {exchange_rate:.1f} {target} за 1 {base}")
-            else:
-                mb.showerror("Ошибка", f"Валюта {target_code} не найдена")
+            response1 = requests.get(f'https://open.er-api.com/v6/latest/{base1_code}')
+            response1.raise_for_status()
+            data1 = response1.json()
+
+            response2 = requests.get(f'https://open.er-api.com/v6/latest/{base2_code}')
+            response2.raise_for_status()
+            data2 = response2.json()
+
+            rate1 = data1['rates'][target_code]
+            rate2 = data2['rates'][target_code]
+
+            name1 = currencies[base1_code]
+            name2 = currencies[base2_code]
+            target = currencies[target_code]
+
+            mb.showinfo(
+                "Курс обмена",
+                f"{rate1:.1f} {target} за 1 {name1}\n"
+                f"{rate2:.1f} {target} за 1 {name2}"
+            )
         except Exception as e:
             mb.showerror("Ошибка", f"Ошибка: {e}")
     else:
-        mb.showwarning("Внимание", "Выберите коды валют")
+        mb.showwarning("Внимание", "Выберите все три валюты")
+
 
 
 # Словарь кодов валют и их полных названий
@@ -61,12 +77,21 @@ window.geometry("360x300")
 
 Label(text="Базовая валюта:").pack(padx=10, pady=5)
 
-base_combobox = ttk.Combobox(values=list(currencies.keys()))
-base_combobox.pack(padx=10, pady=5)
-base_combobox.bind("<<ComboboxSelected>>", update_b_label)
+base_combobox1 = ttk.Combobox(values=list(currencies.keys()))
+base_combobox1.pack(padx=10, pady=5)
+base_combobox1.bind("<<ComboboxSelected>>", update_base1_label)
 
-b_label = ttk.Label()
-b_label.pack(padx=10, pady=10)
+base1_label = ttk.Label()
+base1_label.pack(padx=10, pady=10)
+
+Label(text="Вторая базовая валюта:").pack(padx=10, pady=5)
+
+base_combobox2 = ttk.Combobox(values=list(currencies.keys()))
+base_combobox2.pack(padx=10, pady=5)
+base_combobox2.bind("<<ComboboxSelected>>", update_base2_label)
+
+base2_label = ttk.Label()
+base2_label.pack(padx=10, pady=10)
 
 Label(text="Целевая валюта:").pack(padx=10, pady=5)
 
