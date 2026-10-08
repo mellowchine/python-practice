@@ -73,7 +73,7 @@ currencies = {
 # Создание графического интерфейса
 window = Tk()
 window.title("Курс обмена валюты")
-window.geometry("360x300")
+window.geometry("360x400")
 
 Label(text="Базовая валюта:").pack(padx=10, pady=5)
 
