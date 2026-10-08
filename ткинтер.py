@@ -4,7 +4,7 @@
 from tkinter import *
 import random
 # import tkinterweb
-from tkinter import messagebox
+from tkinter import messagebox as mb
 
 from tkinter.constants import BOTTOM
 
@@ -347,7 +347,7 @@ from tkinter.constants import BOTTOM
 # window.mainloop()
 # Окна Messagebox
 # Окно askyesno
-import messagebox as mb
+# import messagebox as mb
 def check():
     answer = mb.askyesno(title="Вопрос", message="Перенести данные?")
     if answer:

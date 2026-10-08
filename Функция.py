@@ -1,6 +1,6 @@
 """Функции – подпрограммы, которые лежат в памяти и ждут, когда их вызовут"""
 import numbers
-
+from functools import reduce
 
 # прописываются в начале после импорта
 # если функция ничего не возвращает, то она называется процедура
@@ -142,35 +142,77 @@ import numbers
 # snm('Holland')
 # snm('Max')
 
-def power(n):
-    return n**2
-
-n = power(5)
-print(n)
+# def power(n):
+#     return n**2
+#
+# n = power(5)
+# print(n)
 
 
 # Если все тело функции можно вложить в return,
 # то меняем ее на лямбду
-
-n =(lambda n:n**2) (5) # функция выполнилась в строке
-
-print (n)
-
-l=[22, 33, 44]
-
-n = list(map(str,l)) # с помощью функции map
-n1 = [str(i)for i in l] # с помощью list comprehension – занимает больше мсте
-
-print(n, n1)
-
-
-def power(n):
-    return n*2
-
-n = list(map(power, l))
-print(n)
-
-n = list(map(lambda n: n*2, l))
-
+#
+# n =(lambda n:n**2) (5) # функция выполнилась в строке
+#
+# print (n)
+#
+# l=[22, 33, 44]
 """map – функция высшего порядка, поэтому на первом месте у нее всегда какая-то еще функция, 
 здесь: power, может быть str"""
+#
+# n = list(map(str,l)) # с помощью функции map
+# n1 = [str(i)for i in l] # с помощью list comprehension – занимает больше мсте
+#
+# print(n, n1)
+#
+#
+# def power(n):
+#     return n*2
+#
+# n = list(map(power, l))
+# print(n)
+#
+
+l = [22, 33, 44]
+l1 = [2, 3, 4]
+
+n = list(map(lambda n, m: n > m, l, l1))
+print(n)
+
+n = list (filter(lambda x: x % 2 == 0, l))
+nn = [i for i in l if i % 2 == 0]
+print(n)
+print(nn)
+"""Если l состоит из миллионан значений, 
+то две верхние функции будут выполнять миллион итераций"""
+nn = [] # классическая запись
+for i in l:
+    if i % 2 == 0:
+        nn.append(i)
+
+
+"""Если нет необходимости перебирать весь список, то мы введем break"""
+nn = []
+for i in l:
+    if i == 10:
+        nn.append(i)
+        break
+
+
+"""Агрегирующая функция"""
+city = ["Y", "o", "r", "k", "-", 4, 5]
+# city = map(str, city)
+# print(city)
+# res = "".join(city)
+l = [1, 2, 3, 4, 5]
+res = reduce(lambda n, m: str(n) + str(m), city)
+print(res)
+
+def concat(n, m):
+    print("n = ", n)
+    print("m = ", m)
+    print (str(n) + str(m))
+    return str(n) + str(m)
+
+res = reduce(concat, city)
+
